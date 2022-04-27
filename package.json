@@ -1,6 +1,6 @@
 {
   "name": "@ricdotnet/logger",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A logger utility for my personal projects.",
   "main": "index.js",
   "scripts": {
@@ -9,9 +9,9 @@
     "build": "rm -rf ./dist && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["logger", "logs", "console.log", "log", "logjs", "logts", "logger4ts", "logger4js"],
   "author": "ricdotnet <me@rrocha.uk> https://ricr.dev",
-  "repository": "",
+  "repository": "https://github.com/ricdotnet/logger-utility",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^27.4.1",
