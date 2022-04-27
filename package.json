@@ -1,0 +1,22 @@
+{
+  "name": "@ricdotnet/logger",
+  "version": "0.0.1",
+  "description": "A logger utility for my personal projects.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "ricdotnet <me@rrocha.uk> https://ricr.dev",
+  "repository": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^27.4.1",
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  }
+}
