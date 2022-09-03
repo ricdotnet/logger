@@ -49,17 +49,17 @@ export class Logger {
     let logFile;
     try {
       logFile = await fs.readFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`));
-
-      if ( !logFile ) {
-        const data = 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
-        await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
-      }
-
-      const data = logFile + 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
-      await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
     } catch (e) {
-      // console.error(e);
-      // let me just fail silently if the file does not exist
+      try {
+        if ( !logFile ) {
+          const data = 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
+          await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
+        }
+
+        const data = logFile + 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
+        await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
+      } catch (error) {
+      }
     }
   }
 
