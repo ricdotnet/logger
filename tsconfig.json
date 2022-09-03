@@ -7,9 +7,12 @@
     "outDir": "dist",
     "sourceRoot": "./",
     "allowJs": true,
-    "declaration": true
+    "declaration": true,
+    "resolveJsonModule": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "Tests",
+    "jest.config.js",
   ]
 }

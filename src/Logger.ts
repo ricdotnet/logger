@@ -1,45 +1,46 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { Constants } from './Constants';
-
-// some places use any just because I do not want to deal with multiple types of data...
-// I guess generics would be cool here but eh
-// TODO: Multiple log folders for [info, warn, error]
+import { ILogger, Primitives } from './Types';
 
 export class Logger {
 
-  static LOG_DIR = './Logs';
+  private readonly logDir: string;
 
-  static async checkLogDir() {
-    const dirs = await fs.readdir('./');
-    if ( !dirs.includes(this.LOG_DIR.split('/')[1]) ) {
-      await fs.mkdir(this.LOG_DIR);
-      return this.info('Logs folder generated.');
-    }
-
-    // return this.info('Logs folder already exists... The logger will write inside it.');
+  constructor(options?: ILogger) {
+    this.logDir = path.join(process.cwd(), options?.directory ?? 'Logs');
+    this.checkLogDir();
   }
 
-  static async info(message: any) {
+  async checkLogDir() {
+    try {
+      await fs.mkdir(this.logDir);
+      await this.info(`Logs folder generated. Logging to: ${this.logDir}`);
+    } catch (error) {
+      await this.info(`Logs folder already exists. Logging to: ${this.logDir}`);
+    }
+  }
+
+  async info<T = string>(message: T | Primitives) {
     await this.writeToFile(message, 'info');
     console.log(`${Constants.TEXT_BLUE}[INFO]: ${message}`);
   }
 
-  static async warn(message: any) {
+  async warn<T = string>(message: T | Primitives) {
     await this.writeToFile(message, 'warn');
     console.warn(`${Constants.TEXT_YELLOW}[WARN]: ${message}`);
   }
 
-  static async error(message: any) {
+  async error<T = string>(message: T | Primitives) {
     await this.writeToFile(message, 'error');
     console.error(`${Constants.TEXT_RED}[ERROR]: ${message}`);
   }
 
-  static async writeToFile(message: any, type: string) {
-    const DAY: number     = new Date().getDate();
-    const MONTH: number   = new Date().getMonth() + 1; // +1 because it goes 0-11
-    const YEAR: number    = new Date().getFullYear();
-    const HOURS: number   = new Date().getHours();
+  async writeToFile(message: any, type: string) {
+    const DAY: number = new Date().getDate();
+    const MONTH: number = new Date().getMonth() + 1; // +1 because it goes 0-11
+    const YEAR: number = new Date().getFullYear();
+    const HOURS: number = new Date().getHours();
     const MINUTES: number = new Date().getMinutes();
 
     const FULL_DATE: string = [DAY, MONTH, YEAR].join('-');
@@ -47,19 +48,19 @@ export class Logger {
 
     let logFile;
     try {
-      logFile = await fs.readFile(path.join(this.LOG_DIR, `${FULL_DATE}-${type}.log`));
+      logFile = await fs.readFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`));
+
+      if ( !logFile ) {
+        const data = 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
+        await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
+      }
+
+      const data = logFile + 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
+      await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
     } catch (e) {
       // console.error(e);
       // let me just fail silently if the file does not exist
     }
-
-    if ( !logFile ) {
-      const data = 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
-      return await fs.writeFile(path.join(this.LOG_DIR, `${FULL_DATE}-${type}.log`), data);
-    }
-
-    const data = logFile + 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
-    return await fs.writeFile(path.join(this.LOG_DIR, `${FULL_DATE}-${type}.log`), data);
   }
 
 }
