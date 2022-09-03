@@ -10,5 +10,6 @@ jest.config.js
 .vscode
 .DS_Store
 
-Tests
-Logs
+./Tests
+./Logs
+./src
