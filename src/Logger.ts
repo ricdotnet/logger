@@ -50,17 +50,12 @@ export class Logger {
     try {
       logFile = await fs.readFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`));
     } catch (e) {
-      try {
-        if ( !logFile ) {
-          const data = 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
-          await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
-        }
-
-        const data = logFile + 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
-        await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
-      } catch (error) {
-      }
+      const data = 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
+      await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
     }
+
+    const data = logFile + 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
+    await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
   }
 
 }
