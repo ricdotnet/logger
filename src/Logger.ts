@@ -22,18 +22,18 @@ export class Logger {
   }
 
   async info<T = string>(message: T | Primitives) {
-    await this.writeToFile(message, 'info');
-    console.log(`${Constants.TEXT_BLUE}[INFO]: ${message}`);
+    await this.writeToFile(JSON.stringify(message), 'info');
+    console.log(`${Constants.TEXT_BLUE}[INFO]: ${JSON.stringify(message)}`);
   }
 
   async warn<T = string>(message: T | Primitives) {
-    await this.writeToFile(message, 'warn');
-    console.warn(`${Constants.TEXT_YELLOW}[WARN]: ${message}`);
+    await this.writeToFile(JSON.stringify(message), 'warn');
+    console.warn(`${Constants.TEXT_YELLOW}[WARN]: ${JSON.stringify(message)}`);
   }
 
   async error<T = string>(message: T | Primitives) {
-    await this.writeToFile(message, 'error');
-    console.error(`${Constants.TEXT_RED}[ERROR]: ${message}`);
+    await this.writeToFile(JSON.stringify(message), 'error');
+    console.error(`${Constants.TEXT_RED}[ERROR]: ${JSON.stringify(message)}`);
   }
 
   async writeToFile(message: any, type: string) {
@@ -54,8 +54,10 @@ export class Logger {
       await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
     }
 
-    const data = logFile + 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
-    await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
+    if (logFile) {
+      const data = logFile + 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
+      await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
+    }
   }
 
 }
