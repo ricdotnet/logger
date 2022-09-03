@@ -6,9 +6,11 @@ import { ILogger, Primitives } from './Types';
 export class Logger {
 
   private readonly logDir: string;
+  private readonly logToConsole: boolean;
 
   constructor(options?: ILogger) {
     this.logDir = path.join(process.cwd(), options?.directory ?? 'Logs');
+    this.logToConsole = options?.logToConsole ?? true;
     this.checkLogDir();
   }
 
@@ -23,17 +25,23 @@ export class Logger {
 
   async info<T = string>(message: T | Primitives) {
     await this.writeToFile(JSON.stringify(message), 'info');
-    console.log(`${Constants.TEXT_BLUE}[INFO]: ${JSON.stringify(message)}`);
+    if (this.logToConsole) {
+      console.log(`${Constants.TEXT_BLUE}[INFO]:${Constants.RESET} ${JSON.stringify(message)}`);
+    }
   }
 
   async warn<T = string>(message: T | Primitives) {
     await this.writeToFile(JSON.stringify(message), 'warn');
-    console.warn(`${Constants.TEXT_YELLOW}[WARN]: ${JSON.stringify(message)}`);
+    if (this.logToConsole) {
+      console.warn(`${Constants.TEXT_YELLOW}[WARN]:${Constants.RESET} ${JSON.stringify(message)}`);
+    }
   }
 
   async error<T = string>(message: T | Primitives) {
     await this.writeToFile(JSON.stringify(message), 'error');
-    console.error(`${Constants.TEXT_RED}[ERROR]: ${JSON.stringify(message)}`);
+    if (this.logToConsole) {
+      console.error(`${Constants.TEXT_RED}[ERROR]:${Constants.RESET} ${JSON.stringify(message)}`);
+    }
   }
 
   async writeToFile(message: any, type: string) {
