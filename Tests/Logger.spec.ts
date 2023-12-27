@@ -3,50 +3,51 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 
 const loggerSpy = {
+  debug: null,
   info: null,
   warn: null,
   error: null,
 };
 
-const consoleSpy = {
-  info: jest.spyOn(console, 'log'),
-  warn: jest.spyOn(console, 'warn'),
-  error: jest.spyOn(console, 'error'),
-};
-
 describe('Logger test', () => {
-  let loggerInstance: Logger;
-
   beforeAll(() => {
-    loggerInstance = new Logger();
+    new Logger();
 
-    loggerSpy.info = jest.spyOn(loggerInstance, 'info');
-    loggerSpy.warn = jest.spyOn(loggerInstance, 'warn');
-    loggerSpy.error = jest.spyOn(loggerInstance, 'error');
+    loggerSpy.debug = jest.spyOn(Logger.get(), 'debug');
+    loggerSpy.info = jest.spyOn(Logger.get(), 'info');
+    loggerSpy.warn = jest.spyOn(Logger.get(), 'warn');
+    loggerSpy.error = jest.spyOn(Logger.get(), 'error');
   });
 
   afterAll(async () => {
     await fs.rm(path.join(process.cwd(), 'Logs'), { recursive: true });
   });
 
+  it('can log a debug', async () => {
+    await Logger.get().debug('hello world');
+
+    expect(loggerSpy.debug).toHaveBeenCalledWith('hello world');
+    expect(loggerSpy.debug).toHaveBeenCalledTimes(1);
+  });
+
   it('can log an info', async () => {
-    await loggerInstance.info('hello world');
+    await Logger.get().info('hello world');
 
     expect(loggerSpy.info).toHaveBeenCalledWith('hello world');
-    expect(consoleSpy.info).toHaveBeenCalledTimes(1);
+    expect(loggerSpy.info).toHaveBeenCalledTimes(1);
   });
 
   it('can log a warning', async () => {
-    await loggerInstance.warn('hello world');
+    await Logger.get().warn('hello world');
 
     expect(loggerSpy.warn).toHaveBeenCalledWith('hello world');
-    expect(consoleSpy.warn).toHaveBeenCalledTimes(1);
+    expect(loggerSpy.warn).toHaveBeenCalledTimes(1);
   });
 
   it('can log an error', async () => {
-    await loggerInstance.error('hello world');
+    await Logger.get().error('hello world');
 
     expect(loggerSpy.error).toHaveBeenCalledWith('hello world');
-    expect(consoleSpy.error).toHaveBeenCalledTimes(1);
+    expect(loggerSpy.error).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,17 +1,39 @@
 import * as fs from 'fs/promises';
-import * as path from 'path';
 import { Constants } from './Constants';
-import { ILogger, Primitives } from './Types';
+import { ILogger, LogLevel, Primitives } from './Types';
+import { Queue } from './Queue';
 
 export class Logger {
-
   private readonly logDir: string;
   private readonly logToConsole: boolean;
+  private readonly logToFile: boolean;
+  private readonly level: LogLevel;
+  private static logger: Logger = null;
+
+  private readonly logQueue: Queue;
 
   constructor(options?: ILogger) {
-    this.logDir = path.join(process.cwd(), options?.directory ?? 'Logs');
+    console.log('Initiating a logger...');
+    if (Logger.logger) {
+      console.warn('The logger was already initiated.');
+      return;
+    }
+    // this.logDir = path.join(process.cwd(), options?.directory ?? 'Logs');
     this.logToConsole = options?.logToConsole ?? true;
-    this.checkLogDir();
+    this.logToFile = options?.logToFile ?? false;
+    this.level = options?.level ?? 'info';
+    // this.checkLogDir();
+    Logger.logger = this;
+
+    if (this.logToFile) {
+      this.logQueue = new Queue();
+    }
+
+    console.log('Logger initiated.');
+  }
+
+  static get(): Logger {
+    return Logger.logger;
   }
 
   async checkLogDir() {
@@ -23,49 +45,54 @@ export class Logger {
     }
   }
 
+  async debug<T = string>(message: T | Primitives) {
+    if (this.logToFile)
+      if (this.logToConsole && this.level === 'debug') {
+        // TODO: add to queue
+        console.debug(
+          `${Constants.TEXT_CYAN}[DEBUG]:${Constants.RESET} ${JSON.stringify(
+            message,
+          )}`,
+        );
+      }
+  }
+
   async info<T = string>(message: T | Primitives) {
-    await this.writeToFile(JSON.stringify(message), 'info');
-    if (this.logToConsole) {
-      console.log(`${Constants.TEXT_BLUE}[INFO]:${Constants.RESET} ${JSON.stringify(message)}`);
-    }
+    if (this.logToFile)
+      if (this.logToConsole) {
+        // TODO: add to queue
+        // await this.writeToFile(JSON.stringify(message), 'info');
+        console.log(
+          `${Constants.TEXT_BLUE}[INFO]:${Constants.RESET} ${JSON.stringify(
+            message,
+          )}`,
+        );
+      }
   }
 
   async warn<T = string>(message: T | Primitives) {
-    await this.writeToFile(JSON.stringify(message), 'warn');
-    if (this.logToConsole) {
-      console.warn(`${Constants.TEXT_YELLOW}[WARN]:${Constants.RESET} ${JSON.stringify(message)}`);
-    }
+    if (this.logToFile)
+      if (this.logToConsole) {
+        // TODO: add to queue
+        // await this.writeToFile(JSON.stringify(message), 'warn');
+        console.warn(
+          `${Constants.TEXT_YELLOW}[WARN]:${Constants.RESET} ${JSON.stringify(
+            message,
+          )}`,
+        );
+      }
   }
 
   async error<T = string>(message: T | Primitives) {
-    await this.writeToFile(JSON.stringify(message), 'error');
-    if (this.logToConsole) {
-      console.error(`${Constants.TEXT_RED}[ERROR]:${Constants.RESET} ${JSON.stringify(message)}`);
-    }
+    if (this.logToFile)
+      if (this.logToConsole) {
+        // TODO: add to queue
+        // await this.writeToFile(JSON.stringify(message), 'error');
+        console.error(
+          `${Constants.TEXT_RED}[ERROR]:${Constants.RESET} ${JSON.stringify(
+            message,
+          )}`,
+        );
+      }
   }
-
-  async writeToFile(message: any, type: string) {
-    const DAY: number = new Date().getDate();
-    const MONTH: number = new Date().getMonth() + 1; // +1 because it goes 0-11
-    const YEAR: number = new Date().getFullYear();
-    const HOURS: number = new Date().getHours();
-    const MINUTES: number = new Date().getMinutes();
-
-    const FULL_DATE: string = [DAY, MONTH, YEAR].join('-');
-    const FULL_TIME: string = [HOURS, MINUTES].join(':');
-
-    let logFile;
-    try {
-      logFile = await fs.readFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`));
-    } catch (e) {
-      const data = 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
-      await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
-    }
-
-    if (logFile) {
-      const data = logFile + 'Log Time: ' + FULL_TIME + '\n' + message + '\n\n';
-      await fs.writeFile(path.join(this.logDir, `${FULL_DATE}-${type}.log`), data);
-    }
-  }
-
 }
