@@ -46,53 +46,57 @@ export class Logger {
   }
 
   async debug<T = string>(message: T | Primitives) {
-    if (this.logToFile)
-      if (this.logToConsole && this.level === 'debug') {
-        // TODO: add to queue
-        console.debug(
-          `${Constants.TEXT_CYAN}[DEBUG]:${Constants.RESET} ${JSON.stringify(
-            message,
-          )}`,
-        );
-      }
+    if (this.logToFile) {
+      //TODO: add to queue
+    }
+    if (this.logToConsole && this.level === 'debug') {
+      console.debug(
+        `${Constants.TEXT_CYAN}[DEBUG]:${Constants.RESET} ${JSON.stringify(
+          message,
+        )}`,
+      );
+    }
   }
 
   async info<T = string>(message: T | Primitives) {
-    if (this.logToFile)
-      if (this.logToConsole) {
-        // TODO: add to queue
-        // await this.writeToFile(JSON.stringify(message), 'info');
-        console.log(
-          `${Constants.TEXT_BLUE}[INFO]:${Constants.RESET} ${JSON.stringify(
-            message,
-          )}`,
-        );
-      }
+    if (this.logToFile) {
+      // TODO: add to queue
+    }
+    if (this.logToConsole) {
+      // await this.writeToFile(JSON.stringify(message), 'info');
+      console.log(
+        `${Constants.TEXT_BLUE}[INFO]:${Constants.RESET} ${JSON.stringify(
+          message,
+        )}`,
+      );
+    }
   }
 
   async warn<T = string>(message: T | Primitives) {
-    if (this.logToFile)
-      if (this.logToConsole) {
-        // TODO: add to queue
-        // await this.writeToFile(JSON.stringify(message), 'warn');
-        console.warn(
-          `${Constants.TEXT_YELLOW}[WARN]:${Constants.RESET} ${JSON.stringify(
-            message,
-          )}`,
-        );
-      }
+    if (this.logToFile) {
+      // TODO: add to queue
+    }
+    if (this.logToConsole) {
+      // await this.writeToFile(JSON.stringify(message), 'warn');
+      console.warn(
+        `${Constants.TEXT_YELLOW}[WARN]:${Constants.RESET} ${JSON.stringify(
+          message,
+        )}`,
+      );
+    }
   }
 
   async error<T = string>(message: T | Primitives) {
-    if (this.logToFile)
-      if (this.logToConsole) {
-        // TODO: add to queue
-        // await this.writeToFile(JSON.stringify(message), 'error');
-        console.error(
-          `${Constants.TEXT_RED}[ERROR]:${Constants.RESET} ${JSON.stringify(
-            message,
-          )}`,
-        );
-      }
+    if (this.logToFile) {
+      // TODO: add to queue
+    }
+    if (this.logToConsole) {
+      // await this.writeToFile(JSON.stringify(message), 'error');
+      console.error(
+        `${Constants.TEXT_RED}[ERROR]:${Constants.RESET} ${JSON.stringify(
+          message,
+        )}`,
+      );
+    }
   }
 }
