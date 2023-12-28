@@ -5,6 +5,7 @@ yarn.lock
 jest.config.js
 tsconfig.json
 index.ts
+.prettierrc.json
 
 .env
 .env.*
@@ -13,6 +14,6 @@ index.ts
 .vscode
 .DS_Store
 
-./Tests
-./Logs
-./src
+Tests
+Logs
+src
