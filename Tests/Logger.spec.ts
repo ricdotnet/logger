@@ -1,6 +1,4 @@
 import { Logger } from '../src/Logger';
-import * as fs from 'fs/promises';
-import * as path from 'path';
 
 const loggerSpy = {
   debug: null,
@@ -17,10 +15,6 @@ describe('Logger test', () => {
     loggerSpy.info = jest.spyOn(Logger.get(), 'info');
     loggerSpy.warn = jest.spyOn(Logger.get(), 'warn');
     loggerSpy.error = jest.spyOn(Logger.get(), 'error');
-  });
-
-  afterAll(async () => {
-    await fs.rm(path.join(process.cwd(), 'Logs'), { recursive: true });
   });
 
   it('can log a debug', async () => {

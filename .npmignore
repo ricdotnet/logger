@@ -1,7 +1,10 @@
 node_modules
 
 package-lock.json
+yarn.lock
 jest.config.js
+tsconfig.json
+index.ts
 
 .env
 .env.*

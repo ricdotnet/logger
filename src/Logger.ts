@@ -1,6 +1,6 @@
 import * as fs from 'fs/promises';
 import { Constants } from './Constants';
-import { ILogger, LogLevel, Primitives } from './Types';
+import { ILogger, LogLevel } from './Types';
 import { Queue } from './Queue';
 
 export class Logger {
@@ -18,15 +18,15 @@ export class Logger {
       console.warn('The logger was already initiated.');
       return;
     }
-    // this.logDir = path.join(process.cwd(), options?.directory ?? 'Logs');
+
     this.logToConsole = options?.logToConsole ?? true;
     this.logToFile = options?.logToFile ?? false;
     this.level = options?.level ?? 'info';
-    // this.checkLogDir();
+
     Logger.logger = this;
 
     if (this.logToFile) {
-      this.logQueue = new Queue();
+      this.logQueue = new Queue(options);
     }
 
     console.log('Logger initiated.');
@@ -36,66 +36,44 @@ export class Logger {
     return Logger.logger;
   }
 
-  async checkLogDir() {
-    try {
-      await fs.mkdir(this.logDir);
-      await this.info(`Logs folder generated. Logging to: ${this.logDir}`);
-    } catch (error) {
-      await this.info(`Logs folder already exists. Logging to: ${this.logDir}`);
-    }
-  }
-
-  async debug<T = string>(message: T | Primitives) {
+  async debug(message: string) {
     if (this.logToFile) {
-      //TODO: add to queue
+      this.logQueue.add(message, 'debug');
     }
     if (this.logToConsole && this.level === 'debug') {
       console.debug(
-        `${Constants.TEXT_CYAN}[DEBUG]:${Constants.RESET} ${JSON.stringify(
-          message,
-        )}`,
+        `${Constants.TEXT_CYAN}[DEBUG]:${Constants.RESET} ${message}`,
       );
     }
   }
 
-  async info<T = string>(message: T | Primitives) {
+  async info(message: string) {
     if (this.logToFile) {
-      // TODO: add to queue
+      this.logQueue.add(message, 'info');
     }
     if (this.logToConsole) {
-      // await this.writeToFile(JSON.stringify(message), 'info');
-      console.log(
-        `${Constants.TEXT_BLUE}[INFO]:${Constants.RESET} ${JSON.stringify(
-          message,
-        )}`,
-      );
+      console.log(`${Constants.TEXT_BLUE}[INFO]:${Constants.RESET} ${message}`);
     }
   }
 
-  async warn<T = string>(message: T | Primitives) {
+  async warn(message: string) {
     if (this.logToFile) {
-      // TODO: add to queue
+      this.logQueue.add(message, 'warn');
     }
     if (this.logToConsole) {
-      // await this.writeToFile(JSON.stringify(message), 'warn');
       console.warn(
-        `${Constants.TEXT_YELLOW}[WARN]:${Constants.RESET} ${JSON.stringify(
-          message,
-        )}`,
+        `${Constants.TEXT_YELLOW}[WARN]:${Constants.RESET} ${message}`,
       );
     }
   }
 
-  async error<T = string>(message: T | Primitives) {
+  async error(message: string) {
     if (this.logToFile) {
-      // TODO: add to queue
+      this.logQueue.add(message, 'error');
     }
     if (this.logToConsole) {
-      // await this.writeToFile(JSON.stringify(message), 'error');
       console.error(
-        `${Constants.TEXT_RED}[ERROR]:${Constants.RESET} ${JSON.stringify(
-          message,
-        )}`,
+        `${Constants.TEXT_RED}[ERROR]:${Constants.RESET} ${message}`,
       );
     }
   }
