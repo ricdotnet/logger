@@ -25,3 +25,10 @@ export enum Constants {
   BG_CYAN      = '\x1b[46m',
   BG_WHITE     = '\x1b[47m',
 }
+
+export enum LogLevels {
+  DEBUG = 'debug',
+  INFO = 'info',
+  WARN = 'warn',
+  ERROR = 'error',
+}

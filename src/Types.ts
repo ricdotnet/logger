@@ -1,5 +1,7 @@
+import { LogLevels } from "./Constants";
+
 export type Primitives = string | number | object;
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+export type LogLevel = LogLevels;
 
 export type LogObject = {
   message: string;
