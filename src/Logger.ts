@@ -46,7 +46,7 @@ export class Logger {
     }
     if (this.logToConsole && this.level === 'debug') {
       console.debug(
-        `${Constants.TEXT_CYAN}[DEBUG]:${Constants.RESET} ${message}`,
+        `${Constants.TEXT_CYAN}[DEBUG] (${new Date()}):${Constants.RESET} ${message}`,
       );
     }
   }
@@ -56,7 +56,7 @@ export class Logger {
       this.logQueue.add(message, LogLevels.DEBUG);
     }
     if (this.logToConsole) {
-      console.log(`${Constants.TEXT_BLUE}[INFO]:${Constants.RESET} ${message}`);
+      console.log(`${Constants.TEXT_BLUE}[INFO] (${new Date()}):${Constants.RESET} ${message}`);
     }
   }
 
@@ -66,7 +66,7 @@ export class Logger {
     }
     if (this.logToConsole) {
       console.warn(
-        `${Constants.TEXT_YELLOW}[WARN]:${Constants.RESET} ${message}`,
+        `${Constants.TEXT_YELLOW}[WARN] (${new Date()}):${Constants.RESET} ${message}`,
       );
     }
   }
@@ -77,7 +77,7 @@ export class Logger {
     }
     if (this.logToConsole) {
       console.error(
-        `${Constants.TEXT_RED}[ERROR]:${Constants.RESET} ${message}`,
+        `${Constants.TEXT_RED}[ERROR] (${new Date()}):${Constants.RESET} ${message}`,
       );
     }
   }
