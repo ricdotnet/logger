@@ -1,5 +1,5 @@
 import * as fs from 'fs/promises';
-import { Constants } from './Constants';
+import { Constants, LogLevels } from './Constants';
 import { ILogger, LogLevel } from './Types';
 import { Queue } from './Queue';
 
@@ -21,7 +21,7 @@ export class Logger {
 
     this.logToConsole = options?.logToConsole ?? true;
     this.logToFile = options?.logToFile ?? false;
-    this.level = options?.level ?? 'info';
+    this.level = options?.level ?? LogLevels.INFO;
 
     Logger.logger = this;
 
@@ -35,10 +35,14 @@ export class Logger {
   static get(): Logger {
     return Logger.logger;
   }
+  
+  static dispose(): void {
+    this.logger = null;
+  }
 
   async debug(message: string) {
     if (this.logToFile) {
-      this.logQueue.add(message, 'debug');
+      this.logQueue.add(message, LogLevels.DEBUG);
     }
     if (this.logToConsole && this.level === 'debug') {
       console.debug(
@@ -49,7 +53,7 @@ export class Logger {
 
   async info(message: string) {
     if (this.logToFile) {
-      this.logQueue.add(message, 'info');
+      this.logQueue.add(message, LogLevels.DEBUG);
     }
     if (this.logToConsole) {
       console.log(`${Constants.TEXT_BLUE}[INFO] (${new Date()}):${Constants.RESET} ${message}`);
@@ -58,7 +62,7 @@ export class Logger {
 
   async warn(message: string) {
     if (this.logToFile) {
-      this.logQueue.add(message, 'warn');
+      this.logQueue.add(message, LogLevels.WARN);
     }
     if (this.logToConsole) {
       console.warn(
@@ -69,12 +73,22 @@ export class Logger {
 
   async error(message: string) {
     if (this.logToFile) {
-      this.logQueue.add(message, 'error');
+      this.logQueue.add(message, LogLevels.ERROR);
     }
     if (this.logToConsole) {
       console.error(
         `${Constants.TEXT_RED}[ERROR] (${new Date()}):${Constants.RESET} ${message}`,
       );
     }
+  }
+  
+  async fmt(lvl: LogLevel, msg: string, ...args: string[]) {
+    let _msg = msg;
+    
+    while (args.length > 0) {
+      _msg = _msg.replace('{}', args.shift());
+    }
+    
+    this[lvl](_msg);
   }
 }

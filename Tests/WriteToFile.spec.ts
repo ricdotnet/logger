@@ -1,9 +1,10 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { Logger } from '../src/Logger';
-import {Queue} from "../src/Queue";
+import { Queue } from '../src/Queue';
+import { sleep } from '../src/Utils';
 
-const spy = {
+const spy: { [key: string]: any } = {
   writeToFile: null,
 }
 
@@ -17,9 +18,19 @@ describe('Write to file test', () => {
     spy.writeToFile = jest.spyOn(Queue.prototype as any, 'writeToFile');
   });
 
-  // afterAll(async () => {
-  //   await fs.rm(path.join(process.cwd(), 'Logs'), { recursive: true });
-  // });
+  afterAll(async () => {
+    await sleep();
+
+    const logsPath = path.join(process.cwd(), 'Logs');
+
+    const files = await fs.readdir(logsPath);
+
+    for (let file of files) {
+      await fs.rm(path.join(logsPath, file), { force: true });
+    }
+
+    await fs.rmdir(logsPath);
+  });
 
   it('can write a debug log to file', async () => {
     await Logger.get().debug('hello world');
