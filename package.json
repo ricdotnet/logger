@@ -20,7 +20,7 @@
     "logger4js"
   ],
   "author": "ricdotnet <me@rrocha.uk> https://ricr.dev",
-  "repository": "https://github.com/ricdotnet/logger-utility",
+  "repository": "https://github.com/ricdotnet/logger",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "30.0.0",
