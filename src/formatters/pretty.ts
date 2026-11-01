@@ -1,4 +1,4 @@
-import type { Formatter, LogEntry } from '../types';
+import { LogLevelNames, type Formatter, type LogEntry } from '../types';
 
 export class PrettyFormatter implements Formatter {
   private indent = 2;
@@ -8,7 +8,7 @@ export class PrettyFormatter implements Formatter {
 
     const context = this.unwrapContext(entry.context ?? {}).join('\n');
 
-    return `[${timestamp}] [${entry.level.toUpperCase()}] ${entry.message}\n${context}`;
+    return `[${timestamp}] [${LogLevelNames[entry.level]}] ${entry.message}\n${context}`;
   }
 
   private unwrapContext(

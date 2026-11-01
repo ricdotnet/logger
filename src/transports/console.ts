@@ -1,9 +1,9 @@
-import { LogEntry, Transport } from '../types';
+import { LogEntry, LogLevel, Transport } from '../types';
 
 export class ConsoleTransport implements Transport {
   write(entry: LogEntry, formatted: string): void {
     const output =
-      entry.level === 'error' || entry.level === 'fatal'
+      entry.level === LogLevel.ERROR || entry.level === LogLevel.FATAL
         ? process.stderr
         : process.stdout;
 

@@ -1,4 +1,20 @@
-export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+export enum LogLevel {
+  TRACE = 0,
+  DEBUG = 10,
+  INFO = 20,
+  WARN = 30,
+  ERROR = 40,
+  FATAL = 50,
+}
+
+export const LogLevelNames: string[] = [
+  'TRACE',
+  'DEBUG',
+  'INFO',
+  'WARN',
+  'ERROR',
+  'FATAL',
+];
 
 export interface LogEntry {
   timestamp: string;

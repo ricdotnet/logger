@@ -1,7 +1,8 @@
 // Main exports
 export { Logger } from './logger';
 
-export type { LogEntry, LogLevel, Formatter, Transport } from './types';
+export { LogLevel, LogLevelNames } from './types';
+export type { LogEntry, Formatter, Transport } from './types';
 
 export { JsonFormatter } from './formatters/json';
 export { PrettyFormatter } from './formatters/pretty';

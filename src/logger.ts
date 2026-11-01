@@ -13,7 +13,7 @@ type TOptions = {
 
 export class Logger {
   private name: string;
-  private level: LogLevel = 'info';
+  private level: LogLevel;
   private transports: Transport[] = [new ConsoleTransport()];
   private context: Record<string, unknown>;
   private formatter: Formatter;
@@ -21,7 +21,7 @@ export class Logger {
 
   constructor(options: TOptions = {}) {
     this.name = options.name || 'default';
-    this.level = options.level || 'info';
+    this.level = options.level || LogLevel.INFO;
     this.transports = [...this.transports, ...(options.transports || [])];
     this.context = options.context || {};
     this.formatter = options.formatter || new JsonFormatter();
@@ -29,27 +29,27 @@ export class Logger {
   }
 
   trace(message: string, context = {}): void {
-    this.log('trace', message, context);
+    this.log(LogLevel.TRACE, message, context);
   }
 
   debug(message: string, context = {}): void {
-    this.log('debug', message, context);
+    this.log(LogLevel.DEBUG, message, context);
   }
 
   info(message: string, context = {}): void {
-    this.log('info', message, context);
+    this.log(LogLevel.INFO, message, context);
   }
 
   warn(message: string, context = {}): void {
-    this.log('warn', message, context);
+    this.log(LogLevel.WARN, message, context);
   }
 
   error(message: string, context = {}): void {
-    this.log('error', message, context);
+    this.log(LogLevel.ERROR, message, context);
   }
 
   fatal(message: string, context = {}): void {
-    this.log('fatal', message, context);
+    this.log(LogLevel.FATAL, message, context);
   }
 
   log(level: LogLevel, message: string, context = {}): void {
@@ -122,6 +122,6 @@ export class Logger {
   }
 
   private shouldLog(level: LogLevel) {
-    return this.level === 'debug' || level === this.level;
+    return level >= this.level;
   }
 }

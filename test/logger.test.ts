@@ -1,5 +1,5 @@
 import { vi, expect, describe, test } from 'vitest';
-import { Logger } from '../src';
+import { Logger, LogLevel } from '../src';
 import { ConsoleTransport } from '../src/transports/console';
 import { JsonFormatter } from '../src/formatters/json';
 import { PrettyFormatter } from '../src/formatters/pretty';
@@ -9,7 +9,7 @@ describe('logger', () => {
     const logger = new Logger();
 
     expect(logger._name).toBe('default');
-    expect(logger._level).toBe('info');
+    expect(logger._level).toBe(LogLevel.INFO);
     expect(logger._transports[0]).toBeInstanceOf(ConsoleTransport);
     expect(Object.keys(logger._context)).toHaveLength(0);
     expect(logger._formatter).toBeInstanceOf(JsonFormatter);
@@ -18,7 +18,7 @@ describe('logger', () => {
 
   test('creates a logger with the given options', () => {
     const logger = new Logger({
-      level: 'debug',
+      level: LogLevel.DEBUG,
       name: 'test',
       transports: [new ConsoleTransport()],
       context: { foo: 'bar' },
@@ -27,7 +27,7 @@ describe('logger', () => {
     });
 
     expect(logger._name).toBe('test');
-    expect(logger._level).toBe('debug');
+    expect(logger._level).toBe(LogLevel.DEBUG);
     expect(logger._transports[0]).toBeInstanceOf(ConsoleTransport);
     expect(logger._context).toEqual({ foo: 'bar' });
     expect(logger._formatter).toBeInstanceOf(PrettyFormatter);
@@ -47,9 +47,24 @@ describe('logger', () => {
       expect.objectContaining({
         name: 'Redacter',
         message: 'Hello, world!',
-        password: '******',
-        foo: 'bar',
+        context: {
+          password: '******',
+          foo: 'bar',
+        },
       }),
     );
+  });
+
+  test('logs if levels are higher than the level set', () => {
+    const logger = new Logger({
+      level: LogLevel.INFO,
+    });
+
+    const writeSpy = vi.spyOn(logger._transports[0], 'write');
+    logger.debug('Does not log a debug log');
+    logger.error('Logs an info log');
+    logger.error('Logs an error log');
+
+    expect(writeSpy).toHaveBeenCalledTimes(2);
   });
 });
