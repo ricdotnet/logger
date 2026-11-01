@@ -1,25 +1,26 @@
+import { JsonFormatter } from './formatters/json';
 import { TLevel } from './level';
 import { Console } from './transports/console';
-import { Transport } from './transports/transport';
+import { Formatter, Transport } from './types';
 
 type TOptions = {
   level?: TLevel;
-  transports?: any[];
-  context?: any;
-  formatter?: any;
+  transports?: Transport[];
+  context?: Record<string, unknown>;
+  formatter?: Formatter;
 };
 
 class Logger {
   private level: TLevel = 'info';
   private transports: Transport[] = [new Console()];
-  private context: any = {};
-  private formatter: any[] = [];
+  private context: Record<string, unknown>;
+  private formatter: Formatter;
 
   constructor(options: TOptions = {}) {
     this.level = options.level || 'info';
     this.transports = [...this.transports, ...(options.transports || [])];
     this.context = options.context || {};
-    this.formatter = options.formatter || {};
+    this.formatter = options.formatter || new JsonFormatter();
   }
 
   info(message: string, context = {}) {
@@ -43,10 +44,10 @@ class Logger {
       ...context,
     };
 
-    const output = this.formatter(entry);
+    const output = this.formatter.format(entry);
 
     for (const transport of this.transports) {
-      transport.write(output);
+      transport.write(entry, output);
     }
   }
 
