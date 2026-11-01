@@ -53,11 +53,12 @@ logger.log('warn', 'High memory usage detected');
 
 The logger supports the following log levels:
 
-- `debug` - Detailed debug information
-- `info` - General informational messages
-- `warn` - Warning messages
-- `error` - Error messages
-- `fatal` - Fatal error messages (rarely recoverable)
+- `0 - TRACE` - Low-level debugging information
+- `10 - DEBUG` - Detailed debug information
+- `20 - INFO` - General informational messages
+- `30 - WARN` - Warning messages
+- `40 - ERROR` - Error messages
+- `50 - FATAL` - Fatal error messages (rarely recoverable)
 
 ### Adding Context
 
@@ -76,12 +77,11 @@ logger.info('User action', {
 The logger accepts an options object in its constructor:
 
 ```typescript
-import { Logger } from '@ricdotnet/logger';
-import { PrettyFormatter } from '@ricdotnet/logger';
+import { Logger, LogLevel, PrettyFormatter } from '@ricdotnet/logger';
 
 const logger = new Logger({
   // Set the minimum log level
-  level: 'debug',
+  level: LogLevel.DEBUG,
 
   // Specify custom formatters (defaults to JsonFormatter)
   formatter: new PrettyFormatter(),
@@ -124,7 +124,9 @@ const logger = new Logger({
 });
 
 logger.info('User logged in', { userId: 123 });
-// Output: [11/1/2024, 10:30:45 AM] [INFO] User logged in {"userId":123}
+// Output:
+// [11/1/2024, 10:30:45 AM] [INFO] User logged in
+//   userId=123
 ```
 
 ### Using Transports
@@ -231,7 +233,7 @@ try {
 
 ```typescript
 constructor(options?: {
-  level?: 'debug' | 'info' | 'warn' | 'error';
+  level?: LogLevel;
   formatter?: Formatter;
   transports?: Transport[];
   context?: Record<string, unknown>;
@@ -250,12 +252,13 @@ constructor(options?: {
 ```typescript
 import {
   Logger, // Main logger class
+  LogLevel, // LogLevel enum containing 5 levels
   PrettyFormatter, // Human-readable formatter
   JsonFormatter, // JSON formatter
   ConsoleTransport, // Console transport
+  LogLevelNames, // Map of log level names corresponding to their enum value
   // Types
   type LogEntry,
-  type LogLevel,
   type Formatter,
   type Transport,
   type TLevel,

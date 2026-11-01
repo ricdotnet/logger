@@ -8,7 +8,7 @@ export class PrettyFormatter implements Formatter {
 
     const context = this.unwrapContext(entry.context ?? {}).join('\n');
 
-    return `[${timestamp}] [${LogLevelNames[entry.level]}] ${entry.message}\n${context}`;
+    return `[${timestamp}] [${LogLevelNames[entry.level].toLocaleUpperCase()}] ${entry.message}\n${context}`;
   }
 
   private unwrapContext(

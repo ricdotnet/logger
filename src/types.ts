@@ -7,14 +7,14 @@ export enum LogLevel {
   FATAL = 50,
 }
 
-export const LogLevelNames: string[] = [
-  'TRACE',
-  'DEBUG',
-  'INFO',
-  'WARN',
-  'ERROR',
-  'FATAL',
-];
+export const LogLevelNames: Record<LogLevel, string> = {
+  [LogLevel.TRACE]: 'trace',
+  [LogLevel.DEBUG]: 'debug',
+  [LogLevel.INFO]: 'info',
+  [LogLevel.WARN]: 'warn',
+  [LogLevel.ERROR]: 'error',
+  [LogLevel.FATAL]: 'fatal',
+};
 
 export interface LogEntry {
   timestamp: string;
