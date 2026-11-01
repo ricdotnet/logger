@@ -1,5 +1,5 @@
 import { JsonFormatter } from './formatters/json';
-import { Console } from './transports/console';
+import { ConsoleTransport } from './transports/console';
 import { Formatter, LogLevel, Transport } from './types';
 
 type TOptions = {
@@ -11,7 +11,7 @@ type TOptions = {
 
 export class Logger {
   private level: LogLevel = 'info';
-  private transports: Transport[] = [new Console()];
+  private transports: Transport[] = [new ConsoleTransport()];
   private context: Record<string, unknown>;
   private formatter: Formatter;
 
