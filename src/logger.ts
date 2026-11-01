@@ -73,7 +73,7 @@ export class Logger {
       timestamp: new Date().toISOString(),
       level,
       message,
-      ...mergedContext,
+      context: mergedContext,
     };
 
     const output = this.formatter.format(entry);
