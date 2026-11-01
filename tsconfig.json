@@ -1,14 +1,20 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "esnext",
-    "sourceMap": true,
-    "removeComments": true,
-    "outDir": "dist",
-    "sourceRoot": "./",
-    "allowJs": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "isolatedDeclarations": true,
     "declaration": true,
-    "resolveJsonModule": true
+    "declarationMap": false,
+    "sourceMap": false,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "rootDir": "src",
+    "outDir": "dist"
   },
-  "exclude": ["node_modules", "tests", "jest.config.js"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

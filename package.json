@@ -1,13 +1,24 @@
 {
   "name": "@ricdotnet/logger",
-  "version": "0.3.3",
-  "description": "A logger utility for my personal projects.",
-  "main": "index.js",
+  "version": "0.4.2",
+  "description": "A logger utility for my personal projects",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
-    "start": "node dist/index.js",
-    "dev": "ts-node index.ts",
-    "build": "rm -rf ./dist && tsc",
-    "test": "jest ./"
+    "build": "tsc",
+    "clear": "rm -rf dist",
+    "prepublishOnly": "npm run clear && npm run build",
+    "test": "vitest"
   },
   "keywords": [
     "logger",
@@ -20,15 +31,15 @@
     "logger4js"
   ],
   "author": "ricdotnet <me@rrocha.uk> https://ricr.dev",
-  "repository": "https://github.com/ricdotnet/logger",
+  "repository": {
+    "url": "git+https://github.com/ricdotnet/logger.git"
+  },
   "license": "ISC",
   "devDependencies": {
-    "@types/jest": "30.0.0",
-    "@types/node": "26.6.6",
-    "jest": "30.5.2",
+    "@types/node": "^26.6.6",
+    "@vitest/coverage-v8": "^5.0.5",
     "prettier": "3.9.10",
-    "ts-jest": "29.4.15",
-    "ts-node": "10.9.2",
-    "typescript": "6.0.3"
+    "typescript": "7.0.2",
+    "vitest": "^5.0.5"
   }
 }
