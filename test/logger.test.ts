@@ -55,6 +55,67 @@ describe('logger', () => {
     );
   });
 
+  test('redacts nested values with keys matching the target path', () => {
+    const logger = new Logger({
+      name: 'Redacter',
+      redact: [
+        'user.password',
+        'user.nested.password',
+        'user.nested.other.password',
+      ],
+    });
+
+    const formatSpy = vi.spyOn(logger._formatter, 'format');
+    logger.info('Hello, world!', {
+      user: {
+        password: '<PASSWORD>',
+        foo: 'bar',
+        nested: {
+          password: '<PASSWORD>',
+          other: {
+            password: '<PASSWORD>',
+          },
+        },
+      },
+    });
+
+    expect(formatSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        context: {
+          user: {
+            password: '******',
+            foo: 'bar',
+            nested: { password: '******', other: { password: '******' } },
+          },
+        },
+      }),
+    );
+  });
+
+  test('redacts target values but keeps the original context untouched', () => {
+    const logger = new Logger({
+      name: 'Redacter',
+      redact: ['password'],
+    });
+
+    const context = { password: '<PASSWORD>', foo: 'bar' };
+
+    const formatSpy = vi.spyOn(logger._formatter, 'format');
+    logger.info('Hello, world!', context);
+
+    expect(formatSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'Redacter',
+        message: 'Hello, world!',
+        context: {
+          password: '******',
+          foo: 'bar',
+        },
+      }),
+    );
+    expect(context).toEqual({ password: '<PASSWORD>', foo: 'bar' });
+  });
+
   test('logs if levels are higher than the level set', () => {
     const logger = new Logger({
       level: LogLevel.INFO,

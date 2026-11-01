@@ -1,4 +1,3 @@
-// Main exports
 export { Logger } from './logger';
 
 export { LogLevel, LogLevelNames } from './types';
