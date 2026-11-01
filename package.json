@@ -11,11 +11,13 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "build": "tsc",
-    "prepublish": "npm run build",
+    "clear": "rm -rf dist",
+    "prepublishOnly": "npm run clear && npm run build",
     "test": "vitest"
   },
   "keywords": [
@@ -29,7 +31,9 @@
     "logger4js"
   ],
   "author": "ricdotnet <me@rrocha.uk> https://ricr.dev",
-  "repository": "https://github.com/ricdotnet/logger",
+  "repository": {
+    "url": "git+https://github.com/ricdotnet/logger.git"
+  },
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^26.6.6",
