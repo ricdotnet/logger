@@ -2,8 +2,20 @@
   "name": "@ricdotnet/logger",
   "version": "0.4.0",
   "description": "A logger utility for my personal projects",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "prepublish": "npm run build"
   },
   "keywords": [
     "logger",

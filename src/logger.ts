@@ -1,17 +1,16 @@
 import { JsonFormatter } from './formatters/json';
-import { TLevel } from './level';
 import { Console } from './transports/console';
-import { Formatter, Transport } from './types';
+import { Formatter, LogLevel, Transport } from './types';
 
 type TOptions = {
-  level?: TLevel;
+  level?: LogLevel;
   transports?: Transport[];
   context?: Record<string, unknown>;
   formatter?: Formatter;
 };
 
-class Logger {
-  private level: TLevel = 'info';
+export class Logger {
+  private level: LogLevel = 'info';
   private transports: Transport[] = [new Console()];
   private context: Record<string, unknown>;
   private formatter: Formatter;
@@ -23,15 +22,15 @@ class Logger {
     this.formatter = options.formatter || new JsonFormatter();
   }
 
-  info(message: string, context = {}) {
+  info(message: string, context = {}): void {
     this.log('info', message, context);
   }
 
-  error(message: string, context = {}) {
+  error(message: string, context = {}): void {
     this.log('error', message, context);
   }
 
-  log(level: TLevel, message: string, context = {}) {
+  log(level: LogLevel, message: string, context = {}): void {
     if (!this.shouldLog(level)) {
       return;
     }
@@ -51,7 +50,7 @@ class Logger {
     }
   }
 
-  child(context: any = {}) {
+  child(context: Record<string, unknown> = {}): Logger {
     return new Logger({
       level: this.level,
       transports: this.transports,
@@ -63,7 +62,7 @@ class Logger {
     });
   }
 
-  private shouldLog(level: TLevel) {
+  private shouldLog(level: LogLevel) {
     return this.level === 'debug' || level === this.level;
   }
 }
