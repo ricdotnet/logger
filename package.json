@@ -1,8 +1,10 @@
 {
   "name": "@ricdotnet/logger",
   "version": "0.4.0",
-  "description": "A logger utility for my personal projects.",
-  "main": "index.js",
+  "description": "A logger utility for my personal projects",
+  "scripts": {
+    "build": "tsc"
+  },
   "keywords": [
     "logger",
     "logs",
